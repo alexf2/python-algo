@@ -5,7 +5,10 @@ class Direction(enum.Enum):
     right = 0
     left = 1
     top = 2
+
     bottom = 3
+    if bottom is None:
+        pass
 
 
 def fill_matrix(n):
@@ -15,12 +18,10 @@ def fill_matrix(n):
         return [[1]]
 
     result = [[None for _ in range(n)] for _ in range(n)]
-    left = 0
-    right = n - 1
-    top = 0
-    bottom = n - 1
-    row = 0
-    col = 0
+
+    left = 0; right = n - 1
+    top = 0; bottom = n - 1
+    row = 0; col = 0
     count = 0
     direction = Direction.right
 
@@ -37,6 +38,7 @@ def fill_matrix(n):
                     row = top
                     direction = Direction.bottom
                     col = right
+
             case Direction.left:
                 if col > left:
                     col -= 1
@@ -45,6 +47,7 @@ def fill_matrix(n):
                     row = bottom
                     direction = Direction.top
                     col = left
+
             case Direction.top:
                 if row > top:
                     row -= 1
@@ -53,6 +56,7 @@ def fill_matrix(n):
                     col = left
                     direction = Direction.right
                     row = top
+
             case Direction.bottom:
                 if row < bottom:
                     row += 1
@@ -61,17 +65,18 @@ def fill_matrix(n):
                     col = right
                     direction = Direction.left
                     row = bottom
+
             case _:
-                raise Exception('Invalid direction')
+                raise Exception("Invalid direction")
 
     return result
 
 
 def dump_matrix(m):
     for row in m:
-        res = ''
+        res = ""
         for col in row:
-            res += f'{col:5}'
+            res += f"{col:5}"
         print(res)
 
 
@@ -79,5 +84,5 @@ def main():
     print(dump_matrix(fill_matrix(5)))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
