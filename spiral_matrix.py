@@ -81,7 +81,7 @@ def dump_matrix(m):
 
 
 def main():
-    print(dump_matrix(fill_matrix(5)))
+    dump_matrix(fill_matrix(5))
 
 
 if __name__ == "__main__":
