@@ -14,24 +14,24 @@ class Ticket:
         return f'{self.departure} --> {self.arrival}'
 
 
-def order_tickets(ticket_data):
-    if not ticket_data:
+def order_tickets(tickets):
+    if not tickets:
         return []
 
-    tickets = {}  # тут будут билеты по depaerture, чтобы их можно было быстро обойти по цепочке
-    start_cities = set()  # города departure
-    end_cities = set()  # города arrival
+    tickets_mapper = {}  # тут будут билеты по depaerture, чтобы их можно было быстро обойти по цепочке
+    departure_cities = set()
+    arrival_cities = set()
 
-    for td in ticket_data:
-        tickets[td.departure] = td
-        start_cities.add(td.departure)
-        end_cities.add(td.arrival)
+    for ticket in tickets:
+        tickets_mapper[ticket.departure] = ticket
+        departure_cities.add(ticket.departure)
+        arrival_cities.add(ticket.arrival)
 
-    if len(start_cities) != len(ticket_data):
+    if len(departure_cities) != len(tickets):
         raise ValueError('Маршрут не может быть построен: найдены дубликаты городов отправления')
 
     # ищем разностью множеств тот город, которого нет в arrival: это и есть начало пути
-    start_path_city = start_cities - end_cities
+    start_path_city = departure_cities - arrival_cities
 
     if not start_path_city:
         raise ValueError('Начальный город отправления не найден')
@@ -42,13 +42,13 @@ def order_tickets(ticket_data):
     current_city = start_path_city.pop()  # достаём начальный город из множества
 
     # цикл пока это не финальный город: обходим билеты по маршруту
-    while current_city in tickets:
-        ticket = tickets[current_city]
+    while current_city in tickets_mapper:
+        ticket = tickets_mapper[current_city]
         result.append(ticket)
         # перемещаемся в следующий город по маршруту
         current_city = ticket.arrival
 
-    if len(result) != len(ticket_data):
+    if len(result) != len(tickets):
         raise ValueError('В данных есть несвязанные сегменты')
 
     return result
